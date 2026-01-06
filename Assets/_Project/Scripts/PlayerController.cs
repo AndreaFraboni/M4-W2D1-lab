@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float _speed = 5f;
+
     private Rigidbody _rb;
     private float horizontal, vertical;
     private Vector3 move;
@@ -27,8 +28,7 @@ public class PlayerController : MonoBehaviour
 
     private void CheckInput()
     {
-        horizontal = Input.GetAxisRaw("Horiz" +
-            "ontal");
+        horizontal = Input.GetAxisRaw("Horizontal");
         vertical = Input.GetAxisRaw("Vertical");
 
         move = new Vector3(horizontal, 0, vertical);
@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        _rb.MovePosition(transform.position + move * Time.deltaTime);
+        _rb.MovePosition(transform.position + move * (_speed * Time.deltaTime));
     }
 
     private void Rotation()
