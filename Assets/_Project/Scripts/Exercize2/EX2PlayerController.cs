@@ -15,6 +15,8 @@ public class EX2PlayerController : MonoBehaviour
 
     private float _jumpForce = 5f;
     private bool isJump = false;
+    private bool isDoubleJump = false;
+    private bool isDoubleJumpUsed = false;
 
     private bool isRunning = false;
 
@@ -28,6 +30,12 @@ public class EX2PlayerController : MonoBehaviour
         CheckInput();
         CheckRun();
         CheckJump();
+
+        if (isGrounded)
+        {
+            isDoubleJump = false;
+            isDoubleJumpUsed = false;
+        }
     }
 
     private void FixedUpdate()
@@ -35,6 +43,7 @@ public class EX2PlayerController : MonoBehaviour
         Move();
         Rotation();
         if (isJump) Jump();
+        if (isDoubleJump) Jump();
     }
 
     private void CheckInput()
@@ -43,9 +52,6 @@ public class EX2PlayerController : MonoBehaviour
         vertical = Input.GetAxisRaw("Vertical");
 
         Vector3 inputMove = new Vector3(horizontal, 0, vertical);
-
-        //transform.position = Vector3.Lerp(start, end, Time.deltaTime * smooth);
-        // public static Vector3 Lerp(Vector3 a, Vector3 b, float t);
 
         move = Vector3.Lerp(move, inputMove, _smooth * Time.deltaTime);
     }
@@ -57,6 +63,14 @@ public class EX2PlayerController : MonoBehaviour
         {
             isJump = true;
         }
+        if (Input.GetKeyDown(KeyCode.Space) && !isGrounded)
+        {
+            if (!isDoubleJumpUsed)
+            {
+                isDoubleJump = true;
+                isDoubleJumpUsed = true;
+            }
+        }
     }
 
     private void CheckRun()
@@ -67,16 +81,16 @@ public class EX2PlayerController : MonoBehaviour
         }
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
-            isRunning = false;   
-        }            
+            isRunning = false;
+        }
     }
 
     private void Move()
     {
         if (isRunning)
         {
-            _rb.MovePosition(transform.position + move * ((_speed*2) * Time.deltaTime));
-        } 
+            _rb.MovePosition(transform.position + move * ((_speed * 2) * Time.deltaTime));
+        }
         else
         {
             _rb.MovePosition(transform.position + move * (_speed * Time.deltaTime));
@@ -91,6 +105,7 @@ public class EX2PlayerController : MonoBehaviour
     private void Jump()
     {
         isJump = false;
+        isDoubleJump = false;
         if (isRunning) isRunning = false;
         _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
     }
