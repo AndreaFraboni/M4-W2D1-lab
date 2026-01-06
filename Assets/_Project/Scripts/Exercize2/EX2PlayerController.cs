@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EX2PlayerController : MonoBehaviour
@@ -10,6 +11,13 @@ public class EX2PlayerController : MonoBehaviour
     private float horizontal, vertical;
     private Vector3 move;
 
+    public bool isGrounded = false;
+
+    private float _jumpForce = 5f;
+    private bool isJump = false;
+
+    private bool isRunning = false;
+
     private void Awake()
     {
         if (_rb == null) _rb = GetComponent<Rigidbody>();
@@ -18,12 +26,15 @@ public class EX2PlayerController : MonoBehaviour
     void Update()
     {
         CheckInput();
+        CheckRun();
+        CheckJump();
     }
 
     private void FixedUpdate()
     {
         Move();
         Rotation();
+        if (isJump) Jump();
     }
 
     private void CheckInput()
@@ -39,14 +50,49 @@ public class EX2PlayerController : MonoBehaviour
         move = Vector3.Lerp(move, inputMove, _smooth * Time.deltaTime);
     }
 
+
+    private void CheckJump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            isJump = true;
+        }
+    }
+
+    private void CheckRun()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            isRunning = true;
+        }
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            isRunning = false;   
+        }            
+    }
+
     private void Move()
     {
-        _rb.MovePosition(transform.position + move * (_speed * Time.deltaTime));
+        if (isRunning)
+        {
+            _rb.MovePosition(transform.position + move * ((_speed*2) * Time.deltaTime));
+        } 
+        else
+        {
+            _rb.MovePosition(transform.position + move * (_speed * Time.deltaTime));
+        }
     }
 
     private void Rotation()
     {
         if (move != Vector3.zero) transform.forward = move; // Simple Fix For “Look Rotation Viewing Vector Is Zero”
+    }
+
+    private void Jump()
+    {
+        isJump = false;
+        if (isRunning) isRunning = false;
+        _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
     }
 
 
