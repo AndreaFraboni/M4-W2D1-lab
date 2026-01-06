@@ -6,6 +6,7 @@ public class EX2PlayerController : MonoBehaviour
 
     [SerializeField] float _speed = 5f;
     [SerializeField] float _smooth = 10f;
+    [SerializeField] private float _jumpForce = 5f;
 
     private Rigidbody _rb;
     private float horizontal, vertical;
@@ -13,7 +14,6 @@ public class EX2PlayerController : MonoBehaviour
 
     public bool isGrounded = false;
 
-    private float _jumpForce = 5f;
     private bool isJump = false;
     private bool isDoubleJump = false;
     private bool isDoubleJumpUsed = false;
