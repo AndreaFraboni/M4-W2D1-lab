@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float _speed = 5f;
+    [SerializeField] float _smooth = 10f;
 
     private Rigidbody _rb;
     private float horizontal, vertical;
@@ -31,7 +33,12 @@ public class PlayerController : MonoBehaviour
         horizontal = Input.GetAxisRaw("Horizontal");
         vertical = Input.GetAxisRaw("Vertical");
 
-        move = new Vector3(horizontal, 0, vertical);
+        Vector3 inputMove = new Vector3(horizontal, 0, vertical);
+
+        //transform.position = Vector3.Lerp(start, end, Time.deltaTime * smooth);
+        // public static Vector3 Lerp(Vector3 a, Vector3 b, float t);
+
+        move = Vector3.Lerp(move, inputMove, _smooth * Time.deltaTime);
     }
 
     private void Move()
