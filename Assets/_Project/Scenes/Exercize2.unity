@@ -503,7 +503,7 @@ MonoBehaviour:
   _speed: 5
   _smooth: 10
   _jumpForce: 5
-  _rotationSpeed: 4
+  _rotationSpeed: 5
   isGrounded: 1
 --- !u!54 &940361515
 Rigidbody:

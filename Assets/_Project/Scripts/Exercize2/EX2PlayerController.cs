@@ -54,6 +54,8 @@ public class EX2PlayerController : MonoBehaviour
 
         Vector3 inputMove = new Vector3(horizontal, 0, vertical);
 
+        if (inputMove.sqrMagnitude > 1f) inputMove.Normalize();
+
         move = Vector3.Lerp(move, inputMove, _smooth * Time.deltaTime);
     }
 
