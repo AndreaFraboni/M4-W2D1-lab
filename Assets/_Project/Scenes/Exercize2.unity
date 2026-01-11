@@ -680,10 +680,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8009f9a3c14ee64b88fc934645de15f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _probeDistance: 1
+  _probeDistance: 0.1
   _layerGroundMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   _playerController: {fileID: 0}
 --- !u!1 &1658923768
 GameObject:
