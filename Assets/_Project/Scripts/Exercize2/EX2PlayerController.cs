@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class EX2PlayerController : MonoBehaviour
 {
@@ -99,7 +100,12 @@ public class EX2PlayerController : MonoBehaviour
 
     private void Rotation()
     {
-        if (move != Vector3.zero) transform.forward = move; // Simple Fix For “Look Rotation Viewing Vector Is Zero”
+        if (move != Vector3.zero) //transform.forward = move; 
+        {
+            Quaternion _rotation = Quaternion.LookRotation(move, Vector3.up);
+           
+            transform.rotation = _rotation;
+        }
     }
 
     private void Jump()
