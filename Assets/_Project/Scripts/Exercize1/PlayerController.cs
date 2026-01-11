@@ -33,6 +33,8 @@ public class PlayerController : MonoBehaviour
 
         Vector3 inputMove = new Vector3(horizontal, 0, vertical);
 
+        if (inputMove.sqrMagnitude > 1f) inputMove.Normalize();
+
         //transform.position = Vector3.Lerp(start, end, Time.deltaTime * smooth);
         // public static Vector3 Lerp(Vector3 a, Vector3 b, float t);
 
