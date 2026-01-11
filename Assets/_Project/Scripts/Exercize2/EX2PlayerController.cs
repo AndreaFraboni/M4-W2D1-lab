@@ -4,10 +4,10 @@ using static UnityEngine.GraphicsBuffer;
 
 public class EX2PlayerController : MonoBehaviour
 {
-
     [SerializeField] float _speed = 5f;
     [SerializeField] float _smooth = 10f;
     [SerializeField] private float _jumpForce = 5f;
+    [SerializeField] private float _rotationSpeed = 5f;
 
     private Rigidbody _rb;
     private float horizontal, vertical;
@@ -103,8 +103,12 @@ public class EX2PlayerController : MonoBehaviour
         if (move != Vector3.zero) //transform.forward = move; 
         {
             Quaternion _rotation = Quaternion.LookRotation(move, Vector3.up);
-           
-            transform.rotation = _rotation;
+            //transform.rotation = _rotation;
+
+            // Smoothly interpolate between current rotation and target rotation
+            // transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+
+            transform.rotation = Quaternion.Slerp(transform.rotation, _rotation, Time.deltaTime * _rotationSpeed);
         }
     }
 
