@@ -5,8 +5,8 @@ using UnityEngine;
 public class GroundCheck : MonoBehaviour
 {
 
-    [SerializeField] float _probeDistance = 0.1f;
-    [SerializeField] LayerMask _layerGroundMask;
+    [SerializeField] private float _probeDistance = 0.1f;
+    [SerializeField] private LayerMask _layerGroundMask;
 
     [SerializeField] private EX2PlayerController _playerController;
 
