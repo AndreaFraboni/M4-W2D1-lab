@@ -33,11 +33,8 @@ public class PlayerController : MonoBehaviour
     {
         horizontal = Input.GetAxisRaw("Horizontal");
         vertical = Input.GetAxisRaw("Vertical");
-
         _inputMove = new Vector3(horizontal, 0, vertical);
-
         if (_inputMove.sqrMagnitude > 1f) _inputMove.Normalize();
-
         // transform.position = Vector3.Lerp(start, end, Time.deltaTime * smooth);
         // public static Vector3 Lerp(Vector3 a, Vector3 b, float t);
     }
@@ -53,7 +50,7 @@ public class PlayerController : MonoBehaviour
 
         if (_move != Vector3.zero)
         {
-            _rb.MovePosition(transform.position + _move * (_speed * Time.deltaTime));
+            _rb.MovePosition(transform.position + _move * (_speed * Time.fixedDeltaTime));
         }
     }
 

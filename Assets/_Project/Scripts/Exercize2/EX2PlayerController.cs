@@ -53,11 +53,8 @@ public class EX2PlayerController : MonoBehaviour
     {
         horizontal = Input.GetAxisRaw("Horizontal");
         vertical = Input.GetAxisRaw("Vertical");
-
         _inputMove = new Vector3(horizontal, 0, vertical);
-
         if (_inputMove.sqrMagnitude > 1f) _inputMove.Normalize();
-
         //move = Vector3.Lerp(move, inputMove, _smooth * Time.deltaTime);
     }
 
@@ -103,11 +100,11 @@ public class EX2PlayerController : MonoBehaviour
         {
             if (isRunning)
             {
-                _rb.MovePosition(transform.position + _move * ((_speed * 2) * Time.deltaTime));
+                _rb.MovePosition(transform.position + _move * ((_speed * 2) * Time.fixedDeltaTime));
             }
             else
             {
-                _rb.MovePosition(transform.position + _move * (_speed * Time.deltaTime));
+                _rb.MovePosition(transform.position + _move * (_speed * Time.fixedDeltaTime));
             }
         }
     }
@@ -117,12 +114,10 @@ public class EX2PlayerController : MonoBehaviour
         if (_move != Vector3.zero) //transform.forward = move; 
         {
             Quaternion _rotation = Quaternion.LookRotation(_move, Vector3.up);
-
+            transform.rotation = Quaternion.Slerp(transform.rotation, _rotation, Time.deltaTime * _rotationSpeed);
             //transform.rotation = _rotation;
             // Smoothly interpolate between current rotation and target rotation
             // transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
-
-            transform.rotation = Quaternion.Slerp(transform.rotation, _rotation, Time.deltaTime * _rotationSpeed);
         }
     }
 

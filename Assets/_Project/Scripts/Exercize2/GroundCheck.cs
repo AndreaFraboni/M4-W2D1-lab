@@ -11,7 +11,6 @@ public class GroundCheck : MonoBehaviour
     private void Awake()
     {
         if (_playerController == null) _playerController = GetComponentInParent<EX2PlayerController>();
-
         if (_layerGroundMask == 0) _layerGroundMask = LayerMask.GetMask("Ground");
     }
 
@@ -21,10 +20,8 @@ public class GroundCheck : MonoBehaviour
     }
 
    private void CheckGround()
-    {
-        
+    {        
         bool grounded = Physics.Raycast(transform.position, Vector3.down, _probeDistance, _layerGroundMask);
-
         _playerController.isGrounded = grounded;
     }
 
