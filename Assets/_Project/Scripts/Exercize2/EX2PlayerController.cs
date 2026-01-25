@@ -11,7 +11,9 @@ public class EX2PlayerController : MonoBehaviour
 
     private Rigidbody _rb;
     private float horizontal, vertical;
-    private Vector3 move;
+
+    private Vector3 _inputMove;
+    private Vector3 _move;
 
     public bool isGrounded = false;
 
@@ -52,11 +54,11 @@ public class EX2PlayerController : MonoBehaviour
         horizontal = Input.GetAxisRaw("Horizontal");
         vertical = Input.GetAxisRaw("Vertical");
 
-        Vector3 inputMove = new Vector3(horizontal, 0, vertical);
+        _inputMove = new Vector3(horizontal, 0, vertical);
 
-        if (inputMove.sqrMagnitude > 1f) inputMove.Normalize();
+        if (_inputMove.sqrMagnitude > 1f) _inputMove.Normalize();
 
-        move = Vector3.Lerp(move, inputMove, _smooth * Time.deltaTime);
+        //move = Vector3.Lerp(move, inputMove, _smooth * Time.deltaTime);
     }
 
 
@@ -90,23 +92,33 @@ public class EX2PlayerController : MonoBehaviour
 
     private void Move()
     {
-        if (isRunning)
+        _move = Vector3.Lerp(_move, _inputMove, _smooth * Time.fixedDeltaTime);
+
+        if (_move.sqrMagnitude < 0.0001f)
         {
-            _rb.MovePosition(transform.position + move * ((_speed * 2) * Time.deltaTime));
+            _move = Vector3.zero;
         }
-        else
+
+        if (_move != Vector3.zero)
         {
-            _rb.MovePosition(transform.position + move * (_speed * Time.deltaTime));
+            if (isRunning)
+            {
+                _rb.MovePosition(transform.position + _move * ((_speed * 2) * Time.deltaTime));
+            }
+            else
+            {
+                _rb.MovePosition(transform.position + _move * (_speed * Time.deltaTime));
+            }
         }
     }
 
     private void Rotation()
     {
-        if (move != Vector3.zero) //transform.forward = move; 
+        if (_move != Vector3.zero) //transform.forward = move; 
         {
-            Quaternion _rotation = Quaternion.LookRotation(move, Vector3.up);
-            //transform.rotation = _rotation;
+            Quaternion _rotation = Quaternion.LookRotation(_move, Vector3.up);
 
+            //transform.rotation = _rotation;
             // Smoothly interpolate between current rotation and target rotation
             // transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
 
@@ -121,6 +133,4 @@ public class EX2PlayerController : MonoBehaviour
         if (isRunning) isRunning = false;
         _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
     }
-
-
 }
