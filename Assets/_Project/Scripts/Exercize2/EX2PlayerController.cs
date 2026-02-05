@@ -8,6 +8,7 @@ public class EX2PlayerController : MonoBehaviour
     [SerializeField] float _smooth = 10f;
     [SerializeField] private float _jumpForce = 5f;
     [SerializeField] private float _rotationSpeed = 5f;
+    [SerializeField] private Camera _followCam;
 
     private Rigidbody _rb;
     private float horizontal, vertical;
@@ -53,9 +54,10 @@ public class EX2PlayerController : MonoBehaviour
     {
         horizontal = Input.GetAxisRaw("Horizontal");
         vertical = Input.GetAxisRaw("Vertical");
-        _inputMove = new Vector3(horizontal, 0, vertical);
+
+        _inputMove = Quaternion.Euler(0, _followCam.transform.eulerAngles.y, 0) * new Vector3(horizontal, 0, vertical);
+
         if (_inputMove.sqrMagnitude > 1f) _inputMove.Normalize();
-        //move = Vector3.Lerp(move, inputMove, _smooth * Time.deltaTime);
     }
 
 
@@ -89,6 +91,7 @@ public class EX2PlayerController : MonoBehaviour
 
     private void Move()
     {
+        //move = Vector3.Lerp(move, inputMove, _smooth * Time.deltaTime);
         _move = Vector3.Lerp(_move, _inputMove, _smooth * Time.fixedDeltaTime);
 
         if (_move.sqrMagnitude < 0.0001f)
@@ -111,13 +114,20 @@ public class EX2PlayerController : MonoBehaviour
 
     private void Rotation()
     {
-        if (_move != Vector3.zero) //transform.forward = move; 
+        //if (_inputMove != Vector3.zero)
+        //{
+        //    Quaternion desiredRotation = Quaternion.LookRotation(_inputMove, Vector3.up);
+        //    transform.rotation = desiredRotation;
+        //}
+        if (_inputMove != Vector3.zero) //transform.forward = move; 
         {
-            Quaternion _rotation = Quaternion.LookRotation(_move, Vector3.up);
-            transform.rotation = Quaternion.Slerp(transform.rotation, _rotation, Time.deltaTime * _rotationSpeed);
+            Quaternion _desiredRotation = Quaternion.LookRotation(_inputMove, Vector3.up);
+            transform.rotation = Quaternion.Slerp(transform.rotation, _desiredRotation, Time.deltaTime * _rotationSpeed);
+
             //transform.rotation = _rotation;
             // Smoothly interpolate between current rotation and target rotation
             // transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+
         }
     }
 
